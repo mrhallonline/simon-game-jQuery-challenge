@@ -30,8 +30,28 @@ $("#" + randomChosenColor).fadeOut().fadeIn();
 var sound = new Audio("sounds/" + randomChosenColor + ".mp3");
 sound.play();
 
+//Play sound when button is clicked similar to when randomly selected
+function playSound (name){
+    name=userChosenColor
+    var sound2 = new Audio("sounds/" + name + ".mp3");
+    sound2.play();
+};
+
+//Change CSS value to animate button when pressed
+// function animatePress(){
+    
+// };
+
+
 //Check for button clicks
 $("." + "btn").click(function() {
     userChosenColor = $(this).attr("id");
     userClickedPattern.push(userChosenColor);
+    playSound();
+    $(this).addClass("pressed");
+    setTimeout(function(){
+        $("." + "btn").removeClass("pressed");
+    }, 100);
 });
+
+
