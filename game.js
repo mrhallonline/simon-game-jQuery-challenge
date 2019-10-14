@@ -2,10 +2,14 @@ var gamePattern = [];
 var buttonColors = ["red", "blue", "green", "yellow"];
 var randomChosenColor;
 var userChosenColor;
-var userClickedPattern=[];
+var userClickedPattern = [];
+var level = 0;
 
 function nextSequence() {
+
+   
     // return randomNumber;
+    
     var randomNumber = Math.floor(Math.random() * 4);
     // turn randomNumber into random color add color to game Pattern
     if (randomNumber === 0) {
@@ -21,37 +25,52 @@ function nextSequence() {
         randomChosenColor = buttonColors[3];
         gamePattern.push(randomChosenColor);
     }
+    $("#" + randomChosenColor).fadeOut().fadeIn();
+    //Play different sounds depending on color 
+    var sound = new Audio("sounds/" + randomChosenColor + ".mp3");
+    sound.play();
+    //call function
+    // nextSequence();
+    // Animate button based on random number
+    $("#" + randomChosenColor).fadeOut().fadeIn();
+    //Play different sounds depending on color 
+    var sound = new Audio("sounds/" + randomChosenColor + ".mp3");
+    sound.play();
+    level++
 }
 //call function
-nextSequence();
+// nextSequence();
 // Animate button based on random number
-$("#" + randomChosenColor).fadeOut().fadeIn();
-//Play different sounds depending on color 
-var sound = new Audio("sounds/" + randomChosenColor + ".mp3");
-sound.play();
+// $("#" + randomChosenColor).fadeOut().fadeIn();
+// //Play different sounds depending on color 
+// var sound = new Audio("sounds/" + randomChosenColor + ".mp3");
+// sound.play();
 
 //Play sound when button is clicked similar to when randomly selected
-function playSound (name){
-    name=userChosenColor
+function playSound(name) {
+    name = userChosenColor
     var sound2 = new Audio("sounds/" + name + ".mp3");
     sound2.play();
 };
 
 //Change CSS value to animate button when pressed
 // function animatePress(){
-    
+
 // };
 
 
 //Check for button clicks
-$("." + "btn").click(function() {
+$("." + "btn").click(function () {
     userChosenColor = $(this).attr("id");
     userClickedPattern.push(userChosenColor);
     playSound();
     $(this).addClass("pressed");
-    setTimeout(function(){
+    setTimeout(function () {
         $("." + "btn").removeClass("pressed");
     }, 100);
 });
 
-
+//check for key press to start game
+$(document).keydown(function (event) {
+    nextSequence();
+});
