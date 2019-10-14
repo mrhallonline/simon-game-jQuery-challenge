@@ -1,7 +1,8 @@
 var gamePattern = [];
 var buttonColors = ["red", "blue", "green", "yellow"];
 var randomChosenColor;
-
+var userChosenColor;
+var userClickedPattern=[];
 
 function nextSequence() {
     // return randomNumber;
@@ -19,14 +20,18 @@ function nextSequence() {
     } else {
         randomChosenColor = buttonColors[3];
         gamePattern.push(randomChosenColor);
-        
     }
-    
 }
+//call function
 nextSequence();
 // Animate button based on random number
 $("#" + randomChosenColor).fadeOut().fadeIn();
-
-var sound = new Audio(randomChosenColor + ".mp3");
+//Play different sounds depending on color 
+var sound = new Audio("sounds/" + randomChosenColor + ".mp3");
 sound.play();
 
+//Check for button clicks
+$("." + "btn").click(function() {
+    userChosenColor = $(this).attr("id");
+    userClickedPattern.push(userChosenColor);
+});
