@@ -29,10 +29,8 @@ $("." + "btn").click(function () {
     userChosenColor = $(this).attr("id");
     userClickedPattern.push(userChosenColor);
     playSound(userChosenColor);
-    applyPressed(userChosenColor)
-    
-    
-    checkAnswer(userClickedPattern.length-1);
+    applyPressed(userChosenColor);
+    checkAnswer(userClickedPattern.length - 1);
 });
 
 
@@ -49,18 +47,19 @@ function checkAnswer(currentLevel) {
                 nextSequence();
             }, 1000);
         }
-        } else {
-            console.log("wrong");
-            playSound("wrong");
-            $("body").addClass("game-over")
-            setTimeout (function(){
-                $("body").removeClass("game-over");
-            }, 200)
-            $("h1" + "#level").text("Game Over, press any key to restart.")
-            }
+    } else {
+        console.log("wrong");
+        playSound("wrong");
+        $("body").addClass("game-over");
+        setTimeout(function () {
+            $("body").removeClass("game-over");
+        }, 200);
+        $("h1" + "#level-title").text("Game Over, press any key to restart.");
+        restart();
+    }
 
-        }
-    
+}
+
 
 // what happens each round of the game
 function nextSequence() {
@@ -69,7 +68,7 @@ function nextSequence() {
     // clears user array to start fresh
     userClickedPattern = []
     $("h1" + "#level-title").text("Level " + level);
-    
+
     // generate randomNumber;
     var randomNumber = Math.floor(Math.random() * 4);
     // turn randomNumber into random color add color to game Pattern
@@ -90,24 +89,27 @@ function nextSequence() {
     $("#" + randomChosenColor).fadeIn(100).fadeOut(100).fadeIn(100);
     //Play different sounds depending on color 
     playSound(randomChosenColor);
-   
+
 }
 
 
 //Play sound when button is clicked or randomly selected
 function playSound(name) {
-    
+
     var sound = new Audio("sounds/" + name + ".mp3");
     sound.play();
 };
 
 //Change button look when clicked on to css pressed
-function applyPressed(currentColor){
-    $("#"+ currentColor ).addClass("pressed");
+function applyPressed(currentColor) {
+    $("#" + currentColor).addClass("pressed");
     setTimeout(function () {
         $("#" + currentColor).removeClass("pressed");
     }, 100);
 }
 
-
-
+function restart() {
+    started = false;
+    level = 0;
+    gamePattern = [];
+}
