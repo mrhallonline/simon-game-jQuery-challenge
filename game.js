@@ -1,15 +1,59 @@
-var gamePattern = [];
 var buttonColors = ["red", "blue", "green", "yellow"];
-var randomChosenColor;
-var userChosenColor;
+
+var gamePattern = [];
 var userClickedPattern = [];
+var started = false;
 var level = 0;
 
-function nextSequence() {
+var randomChosenColor;
+var userChosenColor;
+var currentLevel = [];
 
-   
-    // return randomNumber;
+//check for key press to start game
+$(document).keydown(function (event) {
+    if (started == false) {
+        $("h1" + "#level-title").text("Level " + level);
+        nextSequence();
+        started = true;
+    }
+});
+
+// Animate button based on random number
+
+$("." + "btn").click(function () {
+    userChosenColor = $(this).attr("id");
+    userClickedPattern.push(userChosenColor);
+    playSound();
+    applyPressed(userChosenColor)
     
+    // currentLevel.push(userChosenColor);
+    checkAnswer(userClickedPattern.length-1);
+});
+
+//Check Answer function
+function checkAnswer(currentLevel) {
+
+    if (gamePattern[currentLevel] === userClickedPattern[currentLevel]) {
+        console.log("success");
+        if (userClickedPattern.length === gamePattern.length) {
+
+            setTimeout(function () {
+                nextSequence();
+            }, 1000);
+        }
+        } else {
+            console.log("wrong");
+        }
+    }
+
+
+function nextSequence() {
+    //toggle started variable to true so further key presses are ignored
+    level++;
+    userClickedPattern = []
+    $("h1" + "#level-title").text("Level " + level);
+    // return randomNumber;
+
     var randomNumber = Math.floor(Math.random() * 4);
     // turn randomNumber into random color add color to game Pattern
     if (randomNumber === 0) {
@@ -25,52 +69,28 @@ function nextSequence() {
         randomChosenColor = buttonColors[3];
         gamePattern.push(randomChosenColor);
     }
-    $("#" + randomChosenColor).fadeOut().fadeIn();
+    
+    $("#" + randomChosenColor).fadeIn(100).fadeOut(100).fadeIn(100);
     //Play different sounds depending on color 
-    var sound = new Audio("sounds/" + randomChosenColor + ".mp3");
-    sound.play();
-    //call function
-    // nextSequence();
-    // Animate button based on random number
-    $("#" + randomChosenColor).fadeOut().fadeIn();
-    //Play different sounds depending on color 
-    var sound = new Audio("sounds/" + randomChosenColor + ".mp3");
-    sound.play();
-    level++
+    playSound(randomChosenColor);
+   
 }
-//call function
-// nextSequence();
-// Animate button based on random number
-// $("#" + randomChosenColor).fadeOut().fadeIn();
-// //Play different sounds depending on color 
-// var sound = new Audio("sounds/" + randomChosenColor + ".mp3");
-// sound.play();
+
 
 //Play sound when button is clicked similar to when randomly selected
 function playSound(name) {
-    name = userChosenColor
-    var sound2 = new Audio("sounds/" + name + ".mp3");
-    sound2.play();
+    
+    var sound = new Audio("sounds/" + name + ".mp3");
+    sound.play();
 };
 
-//Change CSS value to animate button when pressed
-// function animatePress(){
-
-// };
-
-
-//Check for button clicks
-$("." + "btn").click(function () {
-    userChosenColor = $(this).attr("id");
-    userClickedPattern.push(userChosenColor);
-    playSound();
-    $(this).addClass("pressed");
+//Change button look when clicked on to css pressed
+function applyPressed(currentColor){
+    $("#"+ currentColor ).addClass("pressed");
     setTimeout(function () {
-        $("." + "btn").removeClass("pressed");
+        $("#" + currentColor).removeClass("pressed");
     }, 100);
-});
+}
 
-//check for key press to start game
-$(document).keydown(function (event) {
-    nextSequence();
-});
+
+
