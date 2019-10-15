@@ -11,28 +11,36 @@ var currentLevel = [];
 
 //check for key press to start game
 $(document).keydown(function (event) {
+    //keypress starts game unless already started as shown by variable started
     if (started == false) {
+        //Changes h1 from Press "A Key to Start" to showing level number and progress
         $("h1" + "#level-title").text("Level " + level);
+        //starts first round
         nextSequence();
+        //toggle started variable to true so further key presses are ignored
         started = true;
     }
 });
 
-// Animate button based on random number
+// What happens when button is clicked: 
+//adds clicked color to user array, plays button sound, animates button and calls check answer function
 
 $("." + "btn").click(function () {
     userChosenColor = $(this).attr("id");
     userClickedPattern.push(userChosenColor);
-    playSound();
+    playSound(userChosenColor);
     applyPressed(userChosenColor)
     
-    // currentLevel.push(userChosenColor);
+    
     checkAnswer(userClickedPattern.length-1);
 });
 
+
+///Functions//////////
+
 //Check Answer function
 function checkAnswer(currentLevel) {
-
+    //compares user array to game array
     if (gamePattern[currentLevel] === userClickedPattern[currentLevel]) {
         console.log("success");
         if (userClickedPattern.length === gamePattern.length) {
@@ -43,17 +51,26 @@ function checkAnswer(currentLevel) {
         }
         } else {
             console.log("wrong");
+            playSound("wrong");
+            $("body").addClass("game-over")
+            setTimeout (function(){
+                $("body").removeClass("game-over");
+            }, 200)
+            $("h1" + "#level").text("Game Over, press any key to restart.")
+            }
+
         }
-    }
+    
 
-
+// what happens each round of the game
 function nextSequence() {
-    //toggle started variable to true so further key presses are ignored
+    // advances level count
     level++;
+    // clears user array to start fresh
     userClickedPattern = []
     $("h1" + "#level-title").text("Level " + level);
-    // return randomNumber;
-
+    
+    // generate randomNumber;
     var randomNumber = Math.floor(Math.random() * 4);
     // turn randomNumber into random color add color to game Pattern
     if (randomNumber === 0) {
@@ -69,7 +86,7 @@ function nextSequence() {
         randomChosenColor = buttonColors[3];
         gamePattern.push(randomChosenColor);
     }
-    
+    //animate button when chosen randomly
     $("#" + randomChosenColor).fadeIn(100).fadeOut(100).fadeIn(100);
     //Play different sounds depending on color 
     playSound(randomChosenColor);
@@ -77,7 +94,7 @@ function nextSequence() {
 }
 
 
-//Play sound when button is clicked similar to when randomly selected
+//Play sound when button is clicked or randomly selected
 function playSound(name) {
     
     var sound = new Audio("sounds/" + name + ".mp3");
